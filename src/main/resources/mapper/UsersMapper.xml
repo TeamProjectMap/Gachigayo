@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baegopa.onestep.mapper.IUsersMapper">
+
+    <select id="getUsersIdExists" parameterType="UsersDTO" resultType="UsersDTO">
+        SELECT
+            IF(COUNT(USER_ID) > 0, 'Y','N') AS EXISTS_YN
+        FROM USERS
+        WHERE USERID = #{userid}
+    </select>
+    <select id="getEmailExists" parameterType="UsersDTO" resultType="UsersDTO">
+        SELECT
+            IF(COUNT(USERID) > 0, 'Y', 'N') AS EXISTS_YN
+        FROM USERS
+        WHETE EMAIL = #{email}
+    </select>
+    <insert id="insertUSERS" parameterType="UsersDTO">
+        INSERT INTO USERS
+        (USERID,
+        USERNAME,
+        USERROLE,
+        LOGINID,
+        PASSWORD,
+        PHONE,
+        EMAIL,
+        PUSHTOKEN,
+        REGDT,
+        UPDDT)
+        VALUES (#{userId},
+                #{userName},
+                #{userRole},
+                #{loginId},
+                #{password},
+                #{phone},
+                #{email},
+                #{pushToken},
+                NOW(),
+                NOW())
+    </insert>
+</mapper>

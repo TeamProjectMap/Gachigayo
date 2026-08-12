@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.baegopa.onestep.mapper.IUsersMapper">
+
+    <!-- 알림 목록 조회 -->
+    <select id="getNotificationList"
+            parameterType="NotificationDTO"
+            resultType="NotificationDTO">
+
+        SELECT
+            notificationId AS notificationId,
+            receiverId AS receiverId,
+            tripEventId AS tripEventId,
+            notifyType AS notifyType,
+            content AS content,
+            regDt AS regDt
+        FROM NOTIFICATIONS
+        WHERE receiverId = #{receiverId}
+        ORDER BY regDt DESC
+
+    </select>
+
+
+    <!-- 알림 등록 -->
+    <insert id="insertNotification"
+            parameterType="NotificationDTO">
+
+        INSERT INTO NOTIFICATIONS
+        (
+            receiverId,
+            tripEventId,
+            notifyType,
+            content
+        )
+        VALUES
+            (
+                #{receiverId},
+                #{tripEventId},
+                #{notifyType},
+                #{content}
+            )
+
+    </insert>
+
+
+    <!-- 알림 상세 조회 -->
+    <select id="getNotificationInfo"
+            parameterType="NotificationDTO"
+            resultType="NotificationDTO">
+
+        SELECT
+            notificationId AS notificationId,
+            receiverId AS receiverId,
+            tripEventId AS tripEventId,
+            notifyType AS notifyType,
+            content AS content,
+            regDt AS regDt
+        FROM NOTIFICATIONS
+        WHERE notificationId = #{notificationId}
+
+    </select>
+
+
+    <!-- 알림 삭제 -->
+    <delete id="deleteNotification"
+            parameterType="NotificationDTO">
+
+        DELETE FROM NOTIFICATIONS
+        WHERE notificationId = #{notificationId}
+
+    </delete>
+
+</mapper>
