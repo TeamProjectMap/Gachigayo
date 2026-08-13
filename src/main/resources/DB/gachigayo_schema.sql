@@ -19,13 +19,16 @@ CREATE TABLE USERS (
     userRole    VARCHAR(20)  NOT NULL                COMMENT '사용자 역할 (USER, GUARDIAN)',
     loginId     VARCHAR(50)  NOT NULL                COMMENT '로그인 아이디',
     password    VARCHAR(255) NOT NULL                COMMENT 'BCrypt 암호화 비밀번호',
-    phone       VARCHAR(20)  NOT NULL                COMMENT '연락처 (SOS 자동 발신용)',
+    phone       VARCHAR(20)  NULL                    COMMENT '보호자 연락처',
     email       VARCHAR(100) NOT NULL                COMMENT '이메일 주소 (인증/복구용)',
+    linkCode    VARCHAR(9)   NULL                    COMMENT '보호자 연결코드',
     pushToken   VARCHAR(255) NULL                    COMMENT '푸시 알림 발송용 토큰',
     regDt       DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '가입 일시',
     updDt       DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일시',
     PRIMARY KEY (userId),
-    UNIQUE KEY UK_USERS_loginId (loginId)
+    UNIQUE KEY UK_USERS_loginId (loginId),
+    UNIQUE KEY UK_USERS_email (email),
+    UNIQUE KEY UK_USERS_linkCode (linkCode)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='사용자 계정';
 
 -- -----------------------------------------------------
@@ -41,21 +44,6 @@ CREATE TABLE GUARDIAN_LINKS (
     CONSTRAINT FK_GUARDIAN_LINKS_guardian
         FOREIGN KEY (guardianId) REFERENCES USERS (userId) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='보호자 연결';
-
--- -----------------------------------------------------
--- 3. USER_SETTINGS : 사용자별 알림/기능 설정
--- -----------------------------------------------------
-CREATE TABLE USER_SETTINGS (
-    userId             BIGINT  NOT NULL COMMENT '설정 대상 사용자',
-    shareLocationYn    CHAR(1) NOT NULL DEFAULT 'Y' COMMENT '위치 공유 여부',
-    deviationAlarmYn   CHAR(1) NOT NULL DEFAULT 'Y' COMMENT '경로 이탈 알림 여부',
-    arrivalAlarmYn     CHAR(1) NOT NULL DEFAULT 'Y' COMMENT '도착 알림 여부',
-    voiceGuideYn       CHAR(1) NOT NULL DEFAULT 'Y' COMMENT '음성 안내 사용 여부',
-    checkpointAlarmYn  CHAR(1) NOT NULL DEFAULT 'Y' COMMENT '체크포인트 알림 여부',
-    PRIMARY KEY (userId),
-    CONSTRAINT FK_USER_SETTINGS_user
-        FOREIGN KEY (userId) REFERENCES USERS (userId) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='사용자 설정';
 
 -- -----------------------------------------------------
 -- 4. FAVORITE_PLACES : 즐겨찾는 장소
