@@ -17,6 +17,10 @@ public interface IUserMapper {
 
     UserDTO getUserByLoginId(String loginId);
 
+    String getGuardianNameByUserId(Long userId);
+
+    String getUserNameByGuardianId(Long guardianId);
+
     int insertUser(UserDTO userDTO);
 
     int insertGuardianLink(@Param("userId") Long userId, @Param("guardianId") Long guardianId);
