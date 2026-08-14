@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,6 +33,55 @@ public class UserController {
     private final IUserService userService;
     private final IMailService mailService;
     private final SecureRandom secureRandom = new SecureRandom();
+
+    @ResponseBody
+    @GetMapping("/session")
+    public Map<String, Object> getSession(HttpSession session) {
+        Long userId = (Long) session.getAttribute("SS_USER_ID");
+        String userName = (String) session.getAttribute("SS_USER_NAME");
+        String userRole = (String) session.getAttribute("SS_USER_ROLE");
+        String loginId = (String) session.getAttribute("SS_LOGIN_ID");
+
+        if (userId == null || isBlank(userRole)) {
+            return createResponse(false, "로그인이 필요합니다.");
+        }
+
+        Map<String, Object> response = createResponse(true, "로그인 상태입니다.");
+        response.put("userId", userId);
+        response.put("userName", userName);
+        response.put("userRole", userRole);
+        response.put("loginId", loginId);
+
+        return response;
+    }
+
+    @ResponseBody
+    @GetMapping("/home-info")
+    public Map<String, Object> getHomeInfo(HttpSession session) {
+        Long userId = (Long) session.getAttribute("SS_USER_ID");
+        String userName = (String) session.getAttribute("SS_USER_NAME");
+        String userRole = (String) session.getAttribute("SS_USER_ROLE");
+
+        if (userId == null || isBlank(userRole)) {
+            return createResponse(false, "로그인이 필요합니다.");
+        }
+
+        Map<String, Object> homeInfo = userService.getHomeInfo(userId, userRole);
+        Map<String, Object> response = createResponse(true, "홈 정보를 조회했습니다.");
+        response.put("userId", userId);
+        response.put("userName", userName);
+        response.put("userRole", userRole);
+        response.put("linkedName", homeInfo.get("linkedName"));
+
+        return response;
+    }
+
+    @ResponseBody
+    @PostMapping("/logout")
+    public Map<String, Object> logout(HttpSession session) {
+        session.invalidate();
+        return createResponse(true, "로그아웃되었습니다.");
+    }
 
     @ResponseBody
     @PostMapping("/login")

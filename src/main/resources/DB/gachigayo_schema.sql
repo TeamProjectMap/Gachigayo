@@ -46,6 +46,21 @@ CREATE TABLE GUARDIAN_LINKS (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='보호자 연결';
 
 -- -----------------------------------------------------
+-- 3. USER_SETTINGS : 사용자 설정
+-- -----------------------------------------------------
+CREATE TABLE USER_SETTINGS (
+    userId            BIGINT  NOT NULL COMMENT '설정 대상 사용자',
+    shareLocationYn   CHAR(1) NOT NULL DEFAULT 'Y' COMMENT '위치 공유 여부',
+    deviationAlarmYn  CHAR(1) NOT NULL DEFAULT 'Y' COMMENT '경로 이탈 알림 여부',
+    arrivalAlarmYn    CHAR(1) NOT NULL DEFAULT 'Y' COMMENT '도착 알림 여부',
+    voiceGuideYn      CHAR(1) NOT NULL DEFAULT 'Y' COMMENT '음성 안내 사용 여부',
+    checkpointAlarmYn CHAR(1) NOT NULL DEFAULT 'Y' COMMENT '체크포인트 알림 여부',
+    PRIMARY KEY (userId),
+    CONSTRAINT FK_USER_SETTINGS_user
+        FOREIGN KEY (userId) REFERENCES USERS (userId) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='사용자 설정';
+
+-- -----------------------------------------------------
 -- 4. FAVORITE_PLACES : 즐겨찾는 장소
 -- -----------------------------------------------------
 CREATE TABLE FAVORITE_PLACES (
