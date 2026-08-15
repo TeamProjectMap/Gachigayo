@@ -17,6 +17,13 @@ public interface IUserMapper {
 
     UserDTO getUserByLoginId(String loginId);
 
+    /*
+     * 아이디 찾기, 비밀번호 찾기
+     */
+    UserDTO searchUser(UserDTO userDTO);
+
+    int updatePassword(UserDTO userDTO);
+
     String getGuardianNameByUserId(Long userId);
 
     String getUserNameByGuardianId(Long guardianId);

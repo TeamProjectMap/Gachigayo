@@ -22,6 +22,7 @@ public class UserService implements IUserService {
     private static final String ROLE_GUARDIAN = "GUARDIAN";
     private static final String LINK_CODE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final int LINK_CODE_RETRY_LIMIT = 20;
+    private static final String PASSWORD_PATTERN = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,16}$";
 
     private final IUserMapper userMapper;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -140,6 +141,51 @@ public class UserService implements IUserService {
         userMapper.insertGuardianLink(linkedUser.getUserId(), userDTO.getUserId());
 
         return result;
+    }
+
+    /**
+     * 아이디 찾기, 비밀번호 찾기 공용 회원 조회
+     * <p>
+     * 이름 + 이메일만 넘어오면 아이디 찾기, 아이디까지 넘어오면 비밀번호 찾기로 동작함
+     */
+    @Override
+    public UserDTO searchUserIdOrPassword(UserDTO userDTO) {
+        if (userDTO == null || isBlank(userDTO.getUserName()) || isBlank(userDTO.getEmail())) {
+            throw new IllegalArgumentException("이름과 이메일을 입력해주세요.");
+        }
+
+        UserDTO rDTO = userMapper.searchUser(userDTO);
+
+        log.info("회원 찾기 결과 userName={}, email={}, 조회여부={}",
+                userDTO.getUserName(), userDTO.getEmail(), rDTO != null);
+
+        return rDTO;
+    }
+
+    /**
+     * 비밀번호 재설정
+     */
+    @Override
+    @Transactional
+    public int newPassword(UserDTO userDTO) {
+        if (userDTO == null || isBlank(userDTO.getLoginId())) {
+            throw new IllegalArgumentException("비정상 접근입니다.");
+        }
+
+        if (!isValidPassword(userDTO.getPassword())) {
+            throw new IllegalArgumentException("8~16자 영문, 숫자, 특수문자를 포함해주세요.");
+        }
+
+        // 비밀번호는 절대로 복호화되지 않도록 BCrypt로 암호화해서 저장함
+        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+
+        log.info("비밀번호 재설정 처리 loginId={}", userDTO.getLoginId());
+
+        return userMapper.updatePassword(userDTO);
+    }
+
+    private boolean isValidPassword(String password) {
+        return password != null && password.matches(PASSWORD_PATTERN);
     }
 
     private void validateCommonUserInfo(UserDTO userDTO) {
