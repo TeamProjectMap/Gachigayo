@@ -2,7 +2,11 @@
     $(function () {
         checkSession();
 
-        $(".action-card").on("click", function () {
+        $(".route-search-link").on("click", function () {
+            window.location.href = "/route-search.html";
+        });
+
+        $(".action-card").not(".route-search-link").on("click", function () {
             setMessage($(this).data("ready-message") || "다음 단계에서 연결 예정입니다.");
         });
 

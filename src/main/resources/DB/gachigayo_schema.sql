@@ -66,17 +66,40 @@ CREATE TABLE USER_SETTINGS (
 CREATE TABLE FAVORITE_PLACES (
     favoritePlaceId BIGINT        NOT NULL AUTO_INCREMENT COMMENT '즐겨찾는 장소 고유 번호',
     userId          BIGINT        NOT NULL COMMENT '등록한 이용자',
+    kakaoPlaceId    VARCHAR(50)   NULL                    COMMENT 'Kakao place id',
     category        VARCHAR(20)   NOT NULL COMMENT '장소 분류 (HOME, SCHOOL, WORK, WELFARE, OTHER)',
     placeName       VARCHAR(100)  NOT NULL COMMENT '장소 이름',
-    address         VARCHAR(255)  NOT NULL COMMENT '장소 주소',
+    address           VARCHAR(255)  NOT NULL COMMENT '장소 주소',
+    roadAddress     VARCHAR(255)  NULL                    COMMENT '도로명 주소',
     lat             DECIMAL(10,7) NOT NULL COMMENT '장소 위도',
     lng             DECIMAL(10,7) NOT NULL COMMENT '장소 경도',
     regDt           DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '등록 일시',
     PRIMARY KEY (favoritePlaceId),
+    UNIQUE KEY UK_FAVORITE_PLACES_user_kakaoPlaceId (userId, kakaoPlaceId),
     KEY IDX_FAVORITE_PLACES_userId (userId),
     CONSTRAINT FK_FAVORITE_PLACES_user
         FOREIGN KEY (userId) REFERENCES USERS (userId) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='즐겨찾는 장소';
+
+-- -----------------------------------------------------
+-- 4-1. RECENT_PLACES : 최근 선택한 장소
+-- -----------------------------------------------------
+CREATE TABLE RECENT_PLACES (
+    recentPlaceId BIGINT        NOT NULL AUTO_INCREMENT COMMENT '최근 장소 고유 번호',
+    userId        BIGINT        NOT NULL COMMENT '이용자',
+    kakaoPlaceId  VARCHAR(50)   NOT NULL COMMENT 'Kakao place id',
+    placeName     VARCHAR(100)  NOT NULL COMMENT '장소 이름',
+    address       VARCHAR(255)  NULL     COMMENT '지번 주소',
+    roadAddress   VARCHAR(255)  NULL     COMMENT '도로명 주소',
+    lat           DECIMAL(10,7) NOT NULL COMMENT '장소 위도',
+    lng           DECIMAL(10,7) NOT NULL COMMENT '장소 경도',
+    searchedAt    DATETIME(6)   NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '선택 일시',
+    PRIMARY KEY (recentPlaceId),
+    UNIQUE KEY UK_RECENT_PLACES_user_kakaoPlaceId (userId, kakaoPlaceId),
+    KEY IDX_RECENT_PLACES_user_searchedAt (userId, searchedAt),
+    CONSTRAINT FK_RECENT_PLACES_user
+        FOREIGN KEY (userId) REFERENCES USERS (userId) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='최근 선택한 장소';
 
 -- -----------------------------------------------------
 -- 5. ROUTES : 저장된 경로
