@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Setter
 @Getter
@@ -15,9 +14,7 @@ public class WeatherDTO implements Serializable {
     private String lon; // 경도
     private double currentTemp; // 현재 기온
 
-    // UI 표현을 위해 아래 두 필드를 추가합니다.
-    private String currentWeather; // 현재 날씨 상태 (예: Rain, Clear, Clouds)
-    private String currentIcon; // 날씨 아이콘 코드 (예: 10d, 01n)
-
-    private List<WeatherDailyDTO> dailyList;
+    private String temp; // 기온
+    private String sky;  // 하늘상태 (1:맑음, 3:구름많음, 4:흐림)
+    private String pty;  // 강수형태 (0:없음, 1:비, 2:비/눈, 3:눈, 4:소나기)
 }

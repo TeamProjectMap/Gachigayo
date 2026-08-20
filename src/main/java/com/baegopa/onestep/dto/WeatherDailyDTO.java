@@ -1,4 +1,6 @@
+/*
 package com.baegopa.onestep.dto;
+
 
 import lombok.Getter;
 import lombok.Setter;

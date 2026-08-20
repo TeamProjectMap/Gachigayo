@@ -1,17 +1,59 @@
-.weather-widget {
+/* src/main/resources/static/css/weather.css */
+
+.weather-card {
     display: flex;
     align-items: center;
-    background-color: #E8F0FF;
-    border-radius: 12px;
-    padding: 16px 20px;
-    margin: 16px 0;
-    width: fit-content;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    font-family: sans-serif;
+    background-color: #EBF2FE; /* 연한 블루 배경 */
+    border-radius: 18px;
+    padding: 18px 24px;
+    width: 100%;
+    max-width: 440px;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
-.weather-left { display: flex; align-items: center; gap: 10px; }
-#temperature { font-size: 1.25rem; font-weight: bold; color: #333; }
-.weather-divider { width: 1px; height: 35px; background-color: #C6D8F9; margin: 0 16px; }
-.weather-right { display: flex; flex-direction: column; gap: 4px; }
-.weather-main-text { font-size: 1rem; font-weight: bold; color: #333; }
-.weather-sub-text { font-size: 0.85rem; color: #666; }
+
+.weather-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.weather-icon {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+}
+
+.weather-temp {
+    font-size: 28px;
+    font-weight: 700;
+    color: #222222;
+}
+
+.weather-divider {
+    width: 1px;
+    height: 38px;
+    background-color: #D0DDF5; /* 세로 구분선 */
+    margin: 0 20px;
+}
+
+.weather-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+}
+
+.weather-main-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1A1A1A;
+    line-height: 1.2;
+}
+
+.weather-sub-text {
+    font-size: 14px;
+    font-weight: 400;
+    color: #555555;
+    line-height: 1.2;
+}
