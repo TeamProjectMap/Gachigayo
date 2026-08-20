@@ -1,0 +1,17 @@
+.weather-widget {
+    display: flex;
+    align-items: center;
+    background-color: #E8F0FF;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    width: fit-content;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    font-family: sans-serif;
+}
+.weather-left { display: flex; align-items: center; gap: 10px; }
+#temperature { font-size: 1.25rem; font-weight: bold; color: #333; }
+.weather-divider { width: 1px; height: 35px; background-color: #C6D8F9; margin: 0 16px; }
+.weather-right { display: flex; flex-direction: column; gap: 4px; }
+.weather-main-text { font-size: 1rem; font-weight: bold; color: #333; }
+.weather-sub-text { font-size: 0.85rem; color: #666; }
