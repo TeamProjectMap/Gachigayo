@@ -6,7 +6,9 @@ import com.baegopa.onestep.util.CmmUtil;
 import com.baegopa.onestep.util.NetworkUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
@@ -15,11 +17,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class WeatherServiceImpl implements IWeatherService {
 
     // ⚠️ 공공데이터포털에서 발급받은 Decoding 인증키 입력
-    private final String SERVICE_KEY = "여기에_인증키_붙여넣기";
+    @Value("${public-data.api-key:}")
+    private String SERVICE_KEY;
 
     @Override
     public WeatherDTO getWeather(WeatherDTO pDTO) throws Exception {
@@ -62,6 +66,9 @@ public class WeatherServiceImpl implements IWeatherService {
         WeatherDTO rDTO = new WeatherDTO();
         rDTO.setLat(pDTO.getLat());
         rDTO.setLon(pDTO.getLon());
+
+        log.debug(SERVICE_KEY);
+        log.debug(root.toString());
 
         if (itemList.isArray()) {
             for (JsonNode item : itemList) {

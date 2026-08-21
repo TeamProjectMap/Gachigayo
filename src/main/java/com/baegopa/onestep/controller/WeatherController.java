@@ -16,8 +16,8 @@ public class WeatherController {
     private final IWeatherService weatherService;
 
     @GetMapping("/getWeather")
-    public WeatherDTO getWeather(@RequestParam(value = "lat", defaultValue = "37.5665") String lat,
-                                 @RequestParam(value = "lon", defaultValue = "126.9780") String lon) throws Exception {
+    public WeatherDTO getWeather(@RequestParam(value = "lat") String lat,
+                                 @RequestParam(value = "lon") String lon) throws Exception {
 
         WeatherDTO pDTO = new WeatherDTO();
         pDTO.setLat(lat);
